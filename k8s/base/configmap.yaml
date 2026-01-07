@@ -6,3 +6,7 @@ data:
   APP_VERSION: "1.0.0"
   APP_ENVIRONMENT: "base"
   SPRING_PROFILES_ACTIVE: "default"
+
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_NAME: "simpleapp"
