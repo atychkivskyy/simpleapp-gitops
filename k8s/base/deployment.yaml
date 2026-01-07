@@ -21,7 +21,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: simpleapp-api
-          image: simple-api:latest
+          image: simpleapp-api:latest
           imagePullPolicy: Always
           ports:
             - name: http
