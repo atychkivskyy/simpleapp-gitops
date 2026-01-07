@@ -1,0 +1,51 @@
+name: Promote Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_env:
+        description: 'Source environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+      target_env:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - prod
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Get source image
+        id: source
+        run: |
+          TAG=$(grep "newTag:" k8s/overlays/${{ inputs.source_env }}/kustomization.yaml | awk '{print $2}')
+          NAME=$(grep "newName:" k8s/overlays/${{ inputs.source_env }}/kustomization.yaml | awk '{print $2}')
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "Promoting $NAME:$TAG"
+
+      - name: Update target environment
+        run: |
+          cd k8s/overlays/${{ inputs.target_env }}
+          kustomize edit set image simpleapp-api=${{ steps.source.outputs.name }}:${{ steps.source.outputs.tag }}
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "promote: simpleapp-api ${{ steps.source.outputs.tag }} from ${{ inputs.source_env }} to ${{ inputs.target_env }}"
+          git push
