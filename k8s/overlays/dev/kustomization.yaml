@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: simpleapp-dev
+
+resources:
+- ../../base
+- namespace.yaml
+
+labels:
+  - includeSelectors: true
+    pairs:
+      environment: dev
+
+images:
+- name: simpleapp-api
+  newName: ghcr.io/atychkivskyy/simpleapp-api
+  newTag: latest
+
+replicas:
+- count: 1
+  name: simpleapp-api
+
+patches:
+- patch: |-
+    - op: replace
+      path: /data/APP_ENVIRONMENT
+      value: "dev"
+  target:
+    kind: ConfigMap
+    name: simpleapp-config
