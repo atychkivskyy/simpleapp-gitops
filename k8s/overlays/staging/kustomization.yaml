@@ -4,28 +4,28 @@ kind: Kustomization
 namespace: simpleapp-staging
 
 resources:
-  - ../../base
-  - namespace.yaml
+- ../../base
+- namespace.yaml
 
 labels:
-  - includeSelectors: true
-    pairs:
-      environment: staging
+- includeSelectors: true
+  pairs:
+    environment: staging
 
 images:
-  - name: simpleapp-api
-    newName: ghcr.io/atychkivskyy/simpleapp-api
-    newTag: latest
+- name: simpleapp-api
+  newName: ghcr.io/atychkivskyy/simpleapp-api
+  newTag: f8cd3c9
 
 replicas:
-  - count: 2
-    name: simpleapp-api
+- count: 2
+  name: simpleapp-api
 
 patches:
-  - patch: |-
-      - op: replace
-        path: /data/APP_ENVIRONMENT
-        value: "staging"
-    target:
-      kind: ConfigMap
-      name: simpleapp-config
+- patch: |-
+    - op: replace
+      path: /data/APP_ENVIRONMENT
+      value: "staging"
+  target:
+    kind: ConfigMap
+    name: simpleapp-config
