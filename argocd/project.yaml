@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simpleapp
+  namespace: argocd
+spec:
+  description: SimpleApp Project
+
+  sourceRepos:
+    - 'https://github.com/atychkivskyy/simpleapp-gitops.git'
+
+  destinations:
+    - namespace: myapp-dev
+      server: https://kubernetes.default.svc
+    - namespace: myapp-staging
+      server: https://kubernetes.default.svc
+    - namespace: myapp-prod
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+
+  namespaceResourceWhitelist:
+    - group: ''
+      kind: '*'
+    - group: 'apps'
+      kind: '*'
+    - group: 'autoscaling'
+      kind: '*'

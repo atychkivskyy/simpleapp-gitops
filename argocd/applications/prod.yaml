@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alphav1
+kind: Application
+metadata:
+  name: simpleapp-api-prod
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argoccd.argoproj.io
+spec:
+  project: simpleapp
+
+  source:
+    repoURL: https://github.com/atychkivskyy/simpleapp-gitops.git
+    targetRevision: main
+    path: k8s/overlays/prod
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: simpleapp-prod
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
