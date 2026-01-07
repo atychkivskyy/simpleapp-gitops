@@ -8,14 +8,14 @@ resources:
 - namespace.yaml
 
 labels:
-  - includeSelectors: true
-    pairs:
-      environment: dev
+- includeSelectors: true
+  pairs:
+    environment: dev
 
 images:
 - name: simpleapp-api
   newName: ghcr.io/atychkivskyy/simpleapp-api
-  newTag: latest
+  newTag: d02d36c2c3c6e8e9d10cb421a281cdbb06b77167
 
 replicas:
 - count: 1
