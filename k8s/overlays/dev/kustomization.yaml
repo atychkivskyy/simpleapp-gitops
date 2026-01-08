@@ -15,7 +15,7 @@ labels:
 images:
 - name: simpleapp-api
   newName: ghcr.io/atychkivskyy/simpleapp-api
-  newTag: "92428e0"
+  newTag: "5018470"
 
 replicas:
 - count: 1
